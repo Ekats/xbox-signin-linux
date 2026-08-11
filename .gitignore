@@ -1,0 +1,6 @@
+WebClient.exe
+*.o
+__pycache__/
+xal-helper.lock
+xal-request.txt
+xal-result.txt
