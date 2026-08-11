@@ -75,13 +75,15 @@ Needs a mingw-w64 C compiler (Fedora `mingw64-gcc`, Debian
 `gcc-mingw-w64-x86-64`, Arch `mingw-w64-gcc`), `python3`, and `firefox`.
 
 ```sh
-make
+git clone https://github.com/Ekats/aoe2de-xbox-signin-linux
+cd aoe2de-xbox-signin-linux
 ./install.sh          # optional path arg; defaults to the usual Steam location
 ```
 
-`install.sh` backs the original up to `WebClient.exe.orig` and is safe to
-re-run — it only takes a backup from a file that imports `mscoree.dll`, so it
-cannot overwrite a good backup with the replacement.
+`install.sh` builds if needed, then backs the original up to
+`WebClient.exe.orig`. Safe to re-run — it only takes a backup from a file that
+imports `mscoree.dll`, so it cannot overwrite a good backup with the
+replacement.
 
 If you would rather not run a script: copy `WebClient.exe`, `xal-helper.py` and
 `xal-launch.sh` into the game directory yourself, keeping a copy of the

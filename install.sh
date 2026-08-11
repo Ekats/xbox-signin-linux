@@ -17,7 +17,18 @@ SHIM="$HERE/WebClient.exe"
 LIVE="$GAME/WebClient.exe"
 ORIG="$GAME/WebClient.exe.orig"
 
-[ -f "$SHIM" ] || { echo "build it first: make" >&2; exit 1; }
+if [ ! -f "$SHIM" ]; then
+    echo "building ..."
+    make -C "$HERE" || {
+        echo >&2
+        echo "build failed -- is a mingw-w64 C compiler installed?" >&2
+        echo "  Fedora: sudo dnf install mingw64-gcc" >&2
+        echo "  Debian: sudo apt install gcc-mingw-w64-x86-64" >&2
+        echo "  Arch:   sudo pacman -S mingw-w64-gcc" >&2
+        exit 1
+    }
+fi
+
 [ -f "$LIVE" ] || { echo "no WebClient.exe in $GAME" >&2; exit 1; }
 
 if grep -qa "mscoree.dll" "$LIVE"; then
