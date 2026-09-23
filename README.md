@@ -1,8 +1,12 @@
-# Xbox Live sign-in for Age of Empires II: DE on Linux
+# Xbox Live sign-in for Microsoft games on Linux
 
-Makes the **Sign in to Xbox Live** button work in AoE2DE under Proton, by
-replacing the game's sign-in window with one that hands the login to your real
-desktop browser.
+Makes the **Sign in to Xbox Live** button work under Proton in games that ship
+Microsoft's XAL `WebClient.exe` — Age of Empires II: DE, Age of Empires IV, and
+[others](#other-games) — by replacing the game's sign-in window with one that
+hands the login to your real desktop browser.
+
+Everything below was worked out on AoE2DE; the mechanism is XAL's, not the
+game's, so it applies unchanged to any game shipping the same client.
 
 If you have been staring at a blank white popup, or one that renders the
 Microsoft login page and then does nothing forever, this is for you.
@@ -77,8 +81,13 @@ Needs a mingw-w64 C compiler (Fedora `mingw64-gcc`, Debian
 ```sh
 git clone https://github.com/Ekats/aoe2de-xbox-signin-linux
 cd aoe2de-xbox-signin-linux
-./install.sh          # optional path arg; defaults to the usual Steam location
+./install.sh          # AoE2DE at the usual Steam location
+./install.sh "$HOME/.local/share/Steam/steamapps/common/Age of Empires IV"
 ```
+
+For any game other than AoE2DE, pass its directory — the one holding
+`WebClient.exe` — as the argument (or set `XAL_GAME_DIR`). The same goes for
+`uninstall.sh`.
 
 `install.sh` builds if needed, then backs the original up to
 `WebClient.exe.orig`. Safe to re-run — it only takes a backup from a file that
@@ -100,7 +109,7 @@ If no browser appears, start the helper by hand — it picks up the pending
 request, and prints each stage as it goes:
 
 ```sh
-python3 -u ~/.local/share/Steam/steamapps/common/AoE2DE/xal-helper.py
+python3 -u "<game dir>/xal-helper.py" --game "<game dir>"
 ```
 
 ### That "Browser is under remote control" banner
@@ -119,7 +128,7 @@ deleted afterwards — which is also why you have to sign in inside it.
 ## Uninstall
 
 ```sh
-./uninstall.sh
+./uninstall.sh        # or: ./uninstall.sh "<game dir>"
 ```
 
 ## Troubleshooting
@@ -137,14 +146,37 @@ Helper output is in `/tmp/xal-helper.log`, Firefox's in `/tmp/xal-firefox.log`.
 
 ## Other games
 
-Any title shipping Microsoft's XAL `TestWebClient` should behave the same way;
-the arguments and stdout contract come from XAL, not from AoE2DE. Untested
-elsewhere.
+Nothing in the fix is specific to AoE2DE: the replacement and the helper derive
+every path from where they are installed, and the arguments, stdout contract
+and multi-stage sign-in all come from XAL. Any game shipping XAL's
+`TestWebClient` as `WebClient.exe` should work.
+
+To check a game, run this in its install directory:
+
+```sh
+grep -la mscoree.dll WebClient.exe &&
+  strings -el WebClient.exe | grep 'TestWebClient requires'
+```
+
+If both match, it is the same client — install with
+`./install.sh "<game dir>"`.
+
+| game | ships the client | sign-in tested |
+|---|---|---|
+| Age of Empires II: DE | yes | yes |
+| Age of Empires IV | yes | yes |
+
+**AoE4 notes.** Once you are logged in, the Firefox window may show a "you're
+not supposed to reach this page" message — harmless, ignore it. AoE4 then opens Steam's browser asking you to link
+your Steam account to Xbox; that is the game's own step, not this tool's (other
+games may or may not do it). Complete it and sign-in works.
+
+Reports for other games are welcome.
 
 ## Tested on
 
 Fedora 44 · Proton Experimental (wine-mono 11.2.0, wine-gecko 2.47.4) ·
-AoE2DE via Steam (appid 813780) · Firefox
+Firefox · via Steam: AoE2DE (appid 813780), AoE4 (appid 1466860)
 
 ## Related
 
