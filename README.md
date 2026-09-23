@@ -166,10 +166,10 @@ If both match, it is the same client — install with
 | Age of Empires II: DE | yes | yes |
 | Age of Empires IV | yes | yes |
 
-**AoE4 notes.** Once you are logged in, the Firefox window may show a "you're
-not supposed to reach this page" message — harmless, ignore it. AoE4 then opens Steam's browser asking you to link
-your Steam account to Xbox; that is the game's own step, not this tool's (other
-games may or may not do it). Complete it and sign-in works.
+**After signing in.** The Firefox window may show a "you're not supposed to
+reach this page" message — harmless, ignore it. The game should then open the
+Steam overlay asking you to link your Steam account to Xbox; that is the
+game's own step, not this tool's. Complete it and sign-in works.
 
 Reports for other games are welcome.
 
